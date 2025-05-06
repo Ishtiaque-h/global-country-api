@@ -121,3 +121,39 @@ Sample Output
     "status":200
 }
 ```
+
+### 4. Update an existing country's details
+
+`POST /api/update-county-data/{id}/`
+
+Insert the id of the country in the **id** variable.
+
+Sample Input
+```
+{
+    "cca2": "TSTCN",
+    "common_name": "Test Country",
+    "official_name": "Republic of Test Country",
+    "region": "Asia",
+    "subregion": "Asia",
+    "capital": "Test",
+    "latitude": -20.0,
+    "longitude": 20.0,
+    "area": 14500,
+    "population": 12345,
+    "flag": "https://flagcdn.com/w320/bw.png",
+    "timezones": [
+        "UTC+05:00"
+    ]
+}
+```
+
+Sample Output
+```
+{
+    "message":"Success",
+    "status":200
+}
+```
+
+

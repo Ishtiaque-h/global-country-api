@@ -66,12 +66,36 @@ class SaveCountry(APIView):
 
     def post(self, request):
         try:
+            if CountryData.objects.filter(cca2_name=request.data["cca2"]).exists():
+                return JsonResponse({'message':'Country already exists','status':210})
             request.data["updated_by"] = request.user.pk
             request.data["updated_at"] = timezone.now()
             serializer = CountrySerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return JsonResponse({'message':'Success','status':200})
+        except Exception as e:
+            print(e)
+            pass
+        return JsonResponse({'message':'Could not save data','status':500})
+
+class Update(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def put(self, request, pk):
+        try:
+            country = CountryData.objects.get(pk=pk)
+            if CountryData.objects.filter(cca2_name=request.data["cca2"]).exclude(pk=pk).exists():
+                return JsonResponse({'message':'Country already exists','status':210})
+            request.data["updated_by"] = request.user.pk
+            request.data["updated_at"] = timezone.now()
+            serializer = CountrySerializer(country, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return JsonResponse({'message':'Success','status':200})
+            return JsonResponse({'message':serializer.errors,'status':400})
+        except CountryData.DoesNotExist:
+            return JsonResponse({'message':'Country does not exist','status':404})
         except Exception as e:
             print(e)
             pass

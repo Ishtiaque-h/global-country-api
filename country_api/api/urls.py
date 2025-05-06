@@ -6,5 +6,6 @@ urlpatterns = [
     path('get-all-countries/', views.CountryList.as_view(), name='all-countries'),
     path('get-specific-county/<int:pk>/', views.CountryDetails.as_view(), name='get-specific-county'),
     path('save-county-data/', views.SaveCountry.as_view(), name='save-county-data'),
+    path('update-county-data/<int:pk>/', views.Update.as_view(), name='update-county-data'),
 ]
 
