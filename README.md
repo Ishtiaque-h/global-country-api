@@ -1,5 +1,5 @@
 # CodeFusion Country API Assignment
-Read the specification [here](https://workdrive.zohopublic.eu/file/j2a2g0216a20eacd84923aa639dae1710f712).
+Read the specifications [here](https://workdrive.zohopublic.eu/file/j2a2g0216a20eacd84923aa639dae1710f712).
 
 ## Requirements
 - Python 3.12 or above.
