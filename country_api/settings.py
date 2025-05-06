@@ -147,5 +147,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_SERVER = "/static"
 
-
+API_URL = env('API_URL')
 

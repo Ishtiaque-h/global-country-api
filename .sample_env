@@ -5,3 +5,4 @@ DB_USER=
 DB_PASS=
 DB_HOST=
 DB_PORT=
+API_URL=https://restcountries.com/v3.1/all

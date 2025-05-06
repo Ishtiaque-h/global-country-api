@@ -35,3 +35,13 @@ python manage.py migrate
 ```
 to migrate the models to the database.
 
+
+
+### Phase 1
+Run
+```
+python manage.py seed_data
+```
+to fetch and save the country data to the database.
+
+
