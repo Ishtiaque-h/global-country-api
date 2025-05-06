@@ -9,6 +9,9 @@ from rest_framework.views import APIView
 from rest_framework import permissions
 from django_ratelimit.decorators import ratelimit
 from rest_framework_simplejwt.tokens import RefreshToken
+from ..core.models import CountryData
+from ..core.serializers import CountrySerializer
+
 
 def get_tokens_for_user(user):
     return str(RefreshToken.for_user(user).access_token)
@@ -34,4 +37,13 @@ class Login(APIView):
             return JsonResponse({'message':'Success','status':200, 'token':get_tokens_for_user(the_user)})
         
         return JsonResponse({'message':'Username of Password is incorrect','status':401}, status=401)
+        
+
+class CountryList(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request):
+        countries = CountrySerializer(CountryData.objects.all().order_by("common_name"), many=True).data
+        
+        return JsonResponse({'countries':countries, 'message':'Sucess','status':200})
         

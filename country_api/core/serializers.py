@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import CountryData
 
-class UserSerializer(serializers.ModelSerializer):
+class CountrySerializer(serializers.ModelSerializer):
     code = serializers.CharField(source='cca2_name')
     
     class Meta:
