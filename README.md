@@ -84,4 +84,10 @@ Copy the token and send it as a **Bearer** token in **Authorization Header** in 
 
 It will return a list of all the countries in the database.
 
+### Retreive details of a specific country
+
+`GET get-specific-county/{id}/`
+
+Insert the id of the country in the **id** variable.
+
 

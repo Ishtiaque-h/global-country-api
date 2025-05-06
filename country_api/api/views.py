@@ -47,3 +47,16 @@ class CountryList(APIView):
         
         return JsonResponse({'countries':countries, 'message':'Sucess','status':200})
         
+
+class CountryDetails(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, pk):
+        country = None
+        try:
+            country = CountrySerializer(CountryData.objects.get(pk=pk)).data
+            return JsonResponse({'country':country, 'message':'Success','status':200})
+        except:
+            pass        
+        return JsonResponse({'country':country, 'message':'Not found','status':404})
+        
