@@ -78,16 +78,46 @@ If username and password are correct it will return something like this
 ```
 Copy the token and send it as a **Bearer** token in **Authorization Header** in rest of the URLs in **Phase 2** .
 
-### List all countries
+### 1. List all countries
 
 `GET /api/get-all-countries/`
 
 It will return a list of all the countries in the database.
 
-### Retreive details of a specific country
+### 2. Retreive details of a specific country
 
-`GET get-specific-county/{id}/`
+`GET /api/get-specific-county/{id}/`
 
 Insert the id of the country in the **id** variable.
 
+### 3. Create a new country entry
 
+`POST /api/save-county-data/`
+
+Sample Input
+```
+{
+    "cca2": "TSTCN",
+    "common_name": "Test Country",
+    "official_name": "Republic of Test Country",
+    "region": "Asia",
+    "subregion": "Asia",
+    "capital": "Test",
+    "latitude": -20.0,
+    "longitude": 20.0,
+    "area": 14500,
+    "population": 12345,
+    "flag": "https://flagcdn.com/w320/bw.png",
+    "timezones": [
+        "UTC+05:00"
+    ]
+}
+```
+
+Sample Output
+```
+{
+    "message":"Success",
+    "status":200
+}
+```

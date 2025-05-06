@@ -5,6 +5,7 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from django.utils.decorators import method_decorator
+from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework import permissions
 from django_ratelimit.decorators import ratelimit
@@ -43,7 +44,7 @@ class CountryList(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request):
-        countries = CountrySerializer(CountryData.objects.all().order_by("common_name"), many=True).data
+        countries = CountrySerializer(CountryData.objects.all().order_by("common_name"), many=True, exclude_fields=True).data
         
         return JsonResponse({'countries':countries, 'message':'Sucess','status':200})
         
@@ -54,9 +55,24 @@ class CountryDetails(APIView):
     def get(self, request, pk):
         country = None
         try:
-            country = CountrySerializer(CountryData.objects.get(pk=pk)).data
+            country = CountrySerializer(CountryData.objects.get(pk=pk), exclude_fields=True).data
             return JsonResponse({'country':country, 'message':'Success','status':200})
         except:
             pass        
         return JsonResponse({'country':country, 'message':'Not found','status':404})
         
+class SaveCountry(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request):
+        try:
+            request.data["updated_by"] = request.user.pk
+            request.data["updated_at"] = timezone.now()
+            serializer = CountrySerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return JsonResponse({'message':'Success','status':200})
+        except Exception as e:
+            print(e)
+            pass
+        return JsonResponse({'message':'Could not save data','status':500})
