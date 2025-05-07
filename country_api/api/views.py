@@ -44,7 +44,6 @@ class CountryList(APIView):
 
     def get(self, request):
         countries = CountrySerializer(CountryData.objects.all().order_by("common_name"), many=True, exclude_fields=True).data
-        
         return JsonResponse({'countries':countries, 'message':'Sucess','status':200})
         
 
@@ -103,7 +102,7 @@ class UpdateCountry(APIView):
 
 class DeleteCountry(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    
+
     def delete(self, request, pk):
         try:
             CountryData.objects.get(pk=pk).delete()
@@ -111,3 +110,21 @@ class DeleteCountry(APIView):
         except:
             pass
         return JsonResponse({'message':'Country Not found','status':404})
+
+
+class CountryListWithRegion(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(name='region', type=str, description='Region')
+        ]
+    )
+    def get(self, request):
+        region = request.query_params.get("region", "")
+        if len(region)==0:
+            return JsonResponse({'message':'Please provide region','status':400})
+        countries = CountrySerializer(CountryData.objects.filter(region=region).order_by("common_name"), many=True, exclude_fields=True).data
+        if len(countries)!=0:
+            return JsonResponse({'countries':countries, 'message':'Success','status':200})
+        return JsonResponse({'message':'No countries found','status':404})

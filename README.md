@@ -59,7 +59,7 @@ Now run the project with
 python manage.py runserver
 ```
 
-Full Documentation of **Phase 2** is available through Swagger.
+Full Documentation of **Phase 2** is available through **Swagger** at
 
 `GET /api/schema/swagger-ui/`
 
@@ -175,6 +175,14 @@ Sample Output
 `DELETE /api/delete-specific-country/{id}/`
 
 Insert the id of the country in the **id** variable.
+
+### 6. List same regional countries of a specific country
+
+`GET /api/get-countries-with-region/?region={region}`
+
+Insert the region name in the **region** variable of query parameter.
+
+**Sample Regions:** Asia, Europe, Africa.
 
 	
 </details>
