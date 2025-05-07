@@ -327,8 +327,6 @@
 					const country_name = $.trim($(this).data("name"));					
 					$("#country-title").text(country_name);
 					
-					$('#countryModal').modal('show');
-					
 					$.ajax({
 						url:"/get-country-details",
 						method:"GET",
@@ -358,6 +356,7 @@
 									`;
 								}
 								$("#same-region-countries").html(same_region_countriesHtml);
+								$('#countryModal').modal('show');
 							}
 						},
 						error:function(err){
