@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
 
+
 class CountryData(models.Model):
     common_name = models.CharField(max_length=255, blank=False, null=False, default="")
     official_name = models.TextField(blank=False, null=False, default="")
@@ -9,6 +10,7 @@ class CountryData(models.Model):
     region = models.CharField(max_length=100, blank=False, null=False, default="")
     subregion = models.CharField(max_length=150, blank=False, null=False, default="")
     capital = models.CharField(max_length=255, blank=False, null=False, default="")
+    languages = ArrayField(models.CharField(max_length=50), blank=True, default=list)
     latitude = models.FloatField()
     longitude = models.FloatField()
     area = models.FloatField()

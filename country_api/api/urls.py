@@ -14,6 +14,7 @@ urlpatterns = [
     path('update-country-data/<int:pk>/', views.UpdateCountry.as_view(), name='update-country-data'),
     path('delete-specific-country/<int:pk>/', views.DeleteCountry.as_view(), name='delete-specific-country'),
     path('get-countries-with-region/', views.CountryListWithRegion.as_view(), name='get-countries-with-region'),
+    path('get-countries-with-language/', views.CountryListWithLanguage.as_view(), name='get-countries-with-language'),
     
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='api:schema'), name='swagger-ui'),

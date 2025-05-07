@@ -184,6 +184,15 @@ Insert the region name in the **region** variable of query parameter.
 
 **Sample Regions:** Asia, Europe, Africa.
 
+
+### 7. List countries that speak the same language based on a given language
+
+`GET /api/get-countries-with-language/?language={language}`
+
+Insert the region name in the **language** variable of query parameter.
+
+**Sample Languages:** English, Bengali.
+
 	
 </details>
 

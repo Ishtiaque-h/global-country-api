@@ -128,3 +128,23 @@ class CountryListWithRegion(APIView):
         if len(countries)!=0:
             return JsonResponse({'countries':countries, 'message':'Success','status':200})
         return JsonResponse({'message':'No countries found','status':404})
+
+
+class CountryListWithLanguage(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(name='language', type=str, description='Language')
+        ]
+    )
+    def get(self, request):
+        language = request.query_params.get("language", "")
+        if len(language)==0:
+            return JsonResponse({'message':'Please provide language','status':400})
+        countries = CountrySerializer(CountryData.objects.filter(languages__contains=[language]).order_by("common_name"), many=True, exclude_fields=True).data
+        if len(countries)!=0:
+            return JsonResponse({'countries':countries, 'message':'Success','status':200})
+        return JsonResponse({'message':'No countries found','status':404})
+
+

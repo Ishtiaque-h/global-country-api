@@ -23,7 +23,12 @@ class Command(BaseCommand):
                     capital = ""
                     if "capital" in a_country:
                         capital = ", ".join(a_country["capital"])
+                    languages = []
+                    if "languages" in a_country:
+                        for key, value in a_country["languages"].items():
+                            languages.append(value)
                     countrydata.capital = capital
+                    countrydata.languages = languages
                     countrydata.subregion = subregion
                     countrydata.save()
                 except IntegrityError:
