@@ -43,7 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'country_api.api',
-    'country_api.core',    
+    'country_api.core',
+    
+    'drf_spectacular',
     
 ]
 
@@ -138,7 +140,8 @@ STATICFILES_FINDERS = (
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
 }
 
 SIMPLE_JWT = {
@@ -153,3 +156,8 @@ STATIC_SERVER = "/static"
 
 API_URL = env('API_URL')
 
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'CodeFusion Country API',
+    'DESCRIPTION': '',
+    'VERSION': '1.0',
+}

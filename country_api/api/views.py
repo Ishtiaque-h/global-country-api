@@ -10,8 +10,9 @@ from rest_framework.views import APIView
 from rest_framework import permissions
 from django_ratelimit.decorators import ratelimit
 from rest_framework_simplejwt.tokens import RefreshToken
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from ..core.models import CountryData
-from ..core.serializers import CountrySerializer
+from ..core.serializers import CountrySerializer, LoginSerializer
 
 
 def get_tokens_for_user(user):
@@ -19,25 +20,23 @@ def get_tokens_for_user(user):
 
 class Login(APIView):
     permission_classes = (permissions.AllowAny,)
-
+    
+    @extend_schema(request=LoginSerializer)
     @method_decorator(ratelimit(key='post:request.data["username"]', rate="10/30m"))
     def post(self, request):
         is_too_many = getattr(request, 'limited', False)
         if is_too_many:
             return JsonResponse({'message':'Too Many Login Attempts. Please Try again Later','status':429}, status=429)
         
-        username = request.data.get("username", "")
-        password = request.data.get("password", "")
+        serializer = LoginSerializer(data=request.data)
         
-        if len(username)==0 or len(password)==0:
-            return JsonResponse({'message':'Please Provide Username and Password','status':400})
+        if serializer.is_valid():
+            the_user = auth.authenticate(username=serializer.validated_data["username"], password=serializer.validated_data["password"])
+            if the_user is not None:
+                return JsonResponse({'message':'Success','status':200, 'token':get_tokens_for_user(the_user)})
+            return JsonResponse({'message':'Username of Password is incorrect','status':401}, status=401)
         
-        the_user = auth.authenticate(username=username, password=password)
-        
-        if the_user is not None:
-            return JsonResponse({'message':'Success','status':200, 'token':get_tokens_for_user(the_user)})
-        
-        return JsonResponse({'message':'Username of Password is incorrect','status':401}, status=401)
+        return JsonResponse({'message':'Please provide usernamd and password','status':400})
         
 
 class CountryList(APIView):
@@ -59,11 +58,12 @@ class CountryDetails(APIView):
             return JsonResponse({'country':country, 'message':'Success','status':200})
         except:
             pass        
-        return JsonResponse({'country':country, 'message':'Not found','status':404})
+        return JsonResponse({'country':country, 'message':'Country Not found','status':404})
         
 class SaveCountry(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-
+    
+    @extend_schema(request=CountrySerializer)
     def post(self, request):
         try:
             if CountryData.objects.filter(cca2_name=request.data["cca2"]).exists():
@@ -79,7 +79,7 @@ class SaveCountry(APIView):
             pass
         return JsonResponse({'message':'Could not save data','status':500})
 
-class Update(APIView):
+class UpdateCountry(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def put(self, request, pk):
@@ -100,3 +100,14 @@ class Update(APIView):
             print(e)
             pass
         return JsonResponse({'message':'Could not save data','status':500})
+
+class DeleteCountry(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    
+    def delete(self, request, pk):
+        try:
+            CountryData.objects.get(pk=pk).delete()
+            return JsonResponse({'message':'Success','status':200})
+        except:
+            pass
+        return JsonResponse({'message':'Country Not found','status':404})

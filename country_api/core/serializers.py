@@ -14,4 +14,9 @@ class CountrySerializer(serializers.ModelSerializer):
 
         if exclude_fields:
             for field in ['full_response', 'updated_by', 'updated_at']:
-                self.fields.pop(field, None)        
+                self.fields.pop(field, None)
+
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
