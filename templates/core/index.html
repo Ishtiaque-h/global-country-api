@@ -34,7 +34,8 @@
 				font-weight:bold;
 			}
 			.control-label{
-				font-size:1.2em;
+				color:#31688f;
+				font-size:1em;
 				font-weight:bold;
 			}
 			.text-error{
@@ -99,17 +100,61 @@
 			#country-title{
 				font-weight:bold;
 			}
+			.text-error{
+				color:red;
+			}
+			.toast-title{
+				color:#1b991b;
+			}
+			.toast-title.text-error {
+				color:red !important;
+				font-size: 1.2em !important;
+			}
+			.toast-body {
+				color: black;
+				font-size: 1.2em;
+			}
+			.description{
+				color:black;
+				font-size:1.1em;
+			}
+			#region-title{
+				font-weight:bold;
+			}
+			.same-countries-table{
+				margin-top:10px;
+			}
+			.region-declaration{
+				font-size: 1.2em;
+			}
+			#logout-button{
+				color:red;
+				font-size:1.1em;
+				text-decoration:none;
+				border:solid 1px red;
+				margin:10px 5px;
+				padding: 5px 10px;
+				border-radius:20px;
+				display:inline-block;
+			}
 		</style>
 	</head>
 	<body>
 		
-		<br/>
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-lg-12 col-md-12 col-sm-12">
+					<div class="text-right">
+						<a href="/logout" id="logout-button">
+							Logout
+						</a>
+					</div>
 					<div class="country_parent">
 						<h3>List of Countries</h3>
 						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<label class="control-label">Search</label>
+							</div>
 							<div class="col-lg-6 col-md-12 col-sm-12">
 								<input type="text" id="search_field" class="form-control" placeholder="Search with common name or official name"/>
 							</div>
@@ -126,7 +171,7 @@
 										<th>Capital(s)</th>
 										<th>Population</th>
 										<th>Timezone(s)</th>
-										<th>Flag</th>
+										<th class="text-center">Flag</th>
 										<th>Actions</th>
 									</tr>
 								</thead>
@@ -181,7 +226,41 @@
 				</button>
 			  </div>
 			  <div class="modal-body">
-				...
+				<div class="row">
+					<div class="col-lg-6 col-md-12 col-sm-12">
+						<label class="control-label">Country Name</label>
+						<p class="description" id="country_name"></p>
+					</div>
+					<div class="col-lg-6 col-md-12 col-sm-12">
+						<label class="control-label">Capital(s)</label>
+						<p class="description" id="country_capital"></p>
+					</div>
+					<div class="col-lg-6 col-md-12 col-sm-12">
+						<label class="control-label">Region</label>
+						<p class="description" id="country_region"></p>
+					</div>
+					<div class="col-lg-6 col-md-12 col-sm-12">
+						<label class="control-label">Language(s)</label>
+						<p class="description" id="country_language"></p>
+					</div>
+					<div class="col-lg-12 col-md-12 col-sm-12">
+						<div class="description region-declaration">
+							Countries in the region <span id="region-title"></span> :
+						</div>
+						<table class="table table-hover table-bordered same-countries-table">
+							<thead>
+								<tr>
+									<th>Country Name</th>
+									<th>Capital(s)</th>
+									<th>Languages(s)</th>
+								</tr>
+							</thead>
+							<tbody id="same-region-countries">
+								
+							</tbody>
+						</table>
+					</div>
+				</div>
 			  </div>
 			  <div class="modal-footer">
 				<button type="button" class="btn btn-secondary close_button" data-dismiss="modal">Close</button>
@@ -190,11 +269,30 @@
 		  </div>
 		</div>
 
+		<div class="toast-container position-fixed bottom-0 end-0 p-3">
+		  <div id="toastMessage" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+			<div class="toast-header">
+			  <strong class="me-auto toast-title"></strong>
+			  <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+			</div>
+			<div class="toast-body"></div>
+		  </div>
+		</div>
 		
 		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 		<script>
 			
+			function showToast(title, message, isError){
+				$(".toast-title").text(title);
+				$(".toast-body").text(message);
+				$(".toast-title").removeClass("text-error");
+				if(isError){
+					$(".toast-title").addClass("text-error");
+				}
+				const toastMessage = bootstrap.Toast.getOrCreateInstance($("#toastMessage")[0]);
+				toastMessage.show();
+			}
 			
 			$(document).ready(function(){
 			
@@ -228,7 +326,44 @@
 					const country_id = $.trim($(this).data("id"));
 					const country_name = $.trim($(this).data("name"));					
 					$("#country-title").text(country_name);
+					
 					$('#countryModal').modal('show');
+					
+					$.ajax({
+						url:"/get-country-details",
+						method:"GET",
+						data:{
+							country_id
+						},
+						success:function(data){
+							if(!data.hasOwnProperty("status")){
+								window.location.href = window.location.href;
+							}
+							if(data.status==404){
+								showToast("Error", "Could not load data", true);
+							}else if(data.status==200){
+								$("#country_name").html(data.the_country.common_name+'<br/><span class="official_name">('+data.the_country.official_name+")</span>");
+								$("#country_capital").text(data.the_country.capital);
+								$("#country_region").text(data.the_country.region);
+								$("#region-title").text(data.the_country.region);
+								$("#country_language").html(data.the_country.languages.join(",<br/>"));
+								var same_region_countriesHtml = "";
+								for(a_country of data.same_region_countries){
+									same_region_countriesHtml +=`
+										<tr>
+											<td>${a_country.common_name}<br/><span class="official_name">(${a_country.official_name})</span></td>
+											<td>${a_country.capital}</td>
+											<td>${a_country.languages.join(", <br/>")}</td>
+										</tr>
+									`;
+								}
+								$("#same-region-countries").html(same_region_countriesHtml);
+							}
+						},
+						error:function(err){
+							showToast("Error", "Sorry, an error occurred", true);
+						}
+					});
 				});
 				
 				$(".close_button").click(function(){

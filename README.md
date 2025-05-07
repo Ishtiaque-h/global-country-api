@@ -207,3 +207,12 @@ Shows results by matching both Common name and Official name.
 	
 </details>
 
+### Phase 3
+
+Go to the URL
+
+`GET /login`
+
+Login with the username and password of the user created earlier.
+It will redirect to the page **List of Countries**.
+
