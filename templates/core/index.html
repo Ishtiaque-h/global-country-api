@@ -75,6 +75,30 @@
 				border:none !important;
 				box-shadow:none !important;
 			}
+			.details_button, .details_button:hover, .details_button:focus {
+				color: white;
+				background: #17866a;
+				font-size: 0.8em;
+				font-weight: bold;
+				padding: 4px 12px;
+				border-radius: 25px;
+				box-shadow: 0px 2px 4px 0px #72a09e;
+			}
+			.close{
+				font-size: 1.8em;
+				border: none;
+				background: white;
+				opacity: 0.6;
+				position: absolute;
+				right: 10;
+				top: 0;
+			}
+			.modal-title{
+				font-size:1.5em;
+			}
+			#country-title{
+				font-weight:bold;
+			}
 		</style>
 	</head>
 	<body>
@@ -103,6 +127,7 @@
 										<th>Population</th>
 										<th>Timezone(s)</th>
 										<th>Flag</th>
+										<th>Actions</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -129,6 +154,11 @@
 											<td>
 												<img class="flag_image" src="{{a_country.flag}}"/>
 											</td>
+											<td class="text-center">
+												<button class="btn details_button" data-id="{{a_country.pk}}" data-name="{{a_country.common_name}}" data-toggle="modal" data-target="#countryModal">
+													Details
+												</button>
+											</td>
 										</tr>
 									{% endfor %}
 								</tbody>
@@ -139,7 +169,30 @@
 			</div>
 		</div>
 		
+		<div class="modal fade modal-lg" id="countryModal" tabindex="-1" role="dialog" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<h5 class="modal-title">
+					Details of <span id="country-title"></span>
+				</h5>
+				<button type="button" class="close close_button" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			  </div>
+			  <div class="modal-body">
+				...
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-secondary close_button" data-dismiss="modal">Close</button>
+			  </div>
+			</div>
+		  </div>
+		</div>
+
+		
 		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 		<script>
 			
 			
@@ -169,7 +222,20 @@
 					
 					$("#result_count").val(filtered_count+" result"+((filtered_count==1)?"":"s"));
 				
-				});				
+				});
+				
+				$(".details_button").click(function(){
+					const country_id = $.trim($(this).data("id"));
+					const country_name = $.trim($(this).data("name"));					
+					$("#country-title").text(country_name);
+					$('#countryModal').modal('show');
+				});
+				
+				$(".close_button").click(function(){
+					
+					$('#countryModal').modal('hide');
+					
+				});
 			
 			});
 		
