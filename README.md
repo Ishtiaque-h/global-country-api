@@ -54,7 +54,21 @@ python manage.py createsuperuser
 ```
 Provide username and password.
 
-Now, hit the URL
+Now run the project with
+```
+python manage.py runserver
+```
+
+Full Documentation of **Phase 2** is available through Swagger.
+
+`GET /api/schema/swagger-ui/`
+
+<details>
+	<summary>Click here to view full details</summary>
+
+______________
+
+Hit the URL
 
 `POST /api/login/`
 
@@ -86,13 +100,13 @@ It will return a list of all the countries in the database.
 
 ### 2. Retreive details of a specific country
 
-`GET /api/get-specific-county/{id}/`
+`GET /api/get-specific-country/{id}/`
 
 Insert the id of the country in the **id** variable.
 
 ### 3. Create a new country entry
 
-`POST /api/save-county-data/`
+`POST /api/save-country-data/`
 
 Sample Input
 ```
@@ -124,7 +138,7 @@ Sample Output
 
 ### 4. Update an existing country's details
 
-`POST /api/update-county-data/{id}/`
+`POST /api/update-country-data/{id}/`
 
 Insert the id of the country in the **id** variable.
 
@@ -156,4 +170,12 @@ Sample Output
 }
 ```
 
+### 5. Delete an existing country
+
+`DELETE /api/delete-specific-country/{id}/`
+
+Insert the id of the country in the **id** variable.
+
+	
+</details>
 
