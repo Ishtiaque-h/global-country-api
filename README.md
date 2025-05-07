@@ -3,6 +3,12 @@ Read the specifications [here](https://workdrive.zohopublic.eu/file/j2a2g0216a20
 
 Check the application in production in [Vercel](https://countryapi-psi.vercel.app).
 
+You can login with
+
+**Username:** admin
+
+**Password:** 12345
+
 ## Requirements
 - Python 3.12 or above.
 - PostgreSQL 14 or above.
