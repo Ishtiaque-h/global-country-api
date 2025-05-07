@@ -1,13 +1,12 @@
 # CodeFusion Country API Assignment
-Read the specifications [here](https://workdrive.zohopublic.eu/file/j2a2g0216a20eacd84923aa639dae1710f712).
-
+Read the specifications [here](https://workdrive.zohopublic.eu/file/j2a2g0216a20eacd84923aa639dae1710f712).  
 Check the application in production in [Vercel](https://countryapi-psi.vercel.app).
 
-You can login with
-
-**Username:** admin
-
+You can login with  
+**Username:** admin  
 **Password:** 12345
+
+Swagger UI available [here](https://countryapi-psi.vercel.app/api/schema/swagger-ui/).
 
 ## Requirements
 - Python 3.12 or above.
