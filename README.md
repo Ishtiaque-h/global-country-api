@@ -189,9 +189,20 @@ Insert the region name in the **region** variable of query parameter.
 
 `GET /api/get-countries-with-language/?language={language}`
 
-Insert the region name in the **language** variable of query parameter.
+Insert the language name in the **language** variable of query parameter.
 
 **Sample Languages:** English, Bengali.
+
+
+### 8. Search for a country by its name
+
+`GET /api/get-countries-with-name/?country={country}`
+
+Insert the country name or partial name of the country in the **country** variable of query parameter.
+
+**Sample Country Names (includes partial names):** Bangladesh, Bhutan, England, South, Territory.
+
+Shows results by matching both Common name and Official name.
 
 	
 </details>

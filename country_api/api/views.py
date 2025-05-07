@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from django.utils.decorators import method_decorator
 from django.utils import timezone
+from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework import permissions
 from django_ratelimit.decorators import ratelimit
@@ -147,4 +148,22 @@ class CountryListWithLanguage(APIView):
             return JsonResponse({'countries':countries, 'message':'Success','status':200})
         return JsonResponse({'message':'No countries found','status':404})
 
+
+
+class CountryListWithName(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(name='country', type=str, description='Country')
+        ]
+    )
+    def get(self, request):
+        country = request.query_params.get("country", "")
+        if len(country)==0:
+            return JsonResponse({'message':'Please provide country name','status':400})
+        countries = CountrySerializer(CountryData.objects.filter(Q(common_name__icontains=country) | Q(official_name__icontains=country)).order_by("common_name"), many=True, exclude_fields=True).data
+        if len(countries)!=0:
+            return JsonResponse({'countries':countries, 'message':'Success','status':200})
+        return JsonResponse({'message':'No countries found','status':404})
 
