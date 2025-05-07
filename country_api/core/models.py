@@ -20,4 +20,8 @@ class CountryData(models.Model):
     full_response = models.JSONField(default=dict)
     updated_by = models.ForeignKey(User, blank=True, null=True, related_name="countries", on_delete=models.SET_NULL)
     updated_at = models.DateTimeField(null=False)
+    
+    @property
+    def get_timezones(self):
+        return ", ".join(self.timezones)
 
