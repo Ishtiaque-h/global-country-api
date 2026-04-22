@@ -5,5 +5,4 @@ DB_USER=
 DB_PASS=
 DB_HOST=
 DB_PORT=
-API_URL=https://restcountries.com/v3.1/all?fields=
-name,cca2,region,latlng,latlng,area,population,flags,timezones,capital
+API_URL=https://restcountries.com/v3.1/all?fields=name,cca2,region,latlng,latlng,area,population,flags,timezones,capital
