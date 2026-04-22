@@ -4,7 +4,7 @@ Check the application in production in [Vercel](https://countryapi-psi.vercel.ap
 
 You can login with  
 **Username:** admin  
-**Password:** 12345
+**Password:** 123456
 
 Swagger UI available [here](https://countryapi-psi.vercel.app/api/schema/swagger-ui/).
 
